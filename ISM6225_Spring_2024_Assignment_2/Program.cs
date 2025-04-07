@@ -12,7 +12,7 @@ namespace Assignment_2
             int[] nums1 = { 4, 3, 2, 7, 8, 2, 3, 1 };
             IList<int> missingNumbers = FindMissingNumbers(nums1);
             Console.WriteLine(string.Join(",", missingNumbers));
-
+            
             // Question 2: Sort Array by Parity
             Console.WriteLine("Question 2:");
             int[] nums2 = { 3, 1, 2, 4 };
@@ -62,8 +62,33 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return new List<int>(); // Placeholder
+                // Edge case: array is null or empty
+                if (nums == null || nums.Length == 0)
+                {
+                    return new List<int>();
+                }
+
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    int index = Math.Abs(nums[i]) - 1;
+                    // Covert indexes into negative numbers
+                    if (nums[index] > 0 )
+                    {
+                        nums[index] = -nums[index];
+                    }
+                }
+
+                // Find missing numbers
+                List<int> missingNumbers = new List<int>();
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (nums[i] > 0)
+                    {
+                     missingNumbers.Add(i + 1);
+                    }
+                }
+
+                return missingNumbers;
             }
             catch (Exception)
             {
@@ -76,8 +101,24 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return new int[0]; // Placeholder
+                List<int> evens = new List<int>();
+                List<int> odds = new List<int>();
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    //no significant edges to consider that are not already handled
+                    // check if the number is even or odd
+                    if (nums[i] % 2 == 0)
+                    {
+                        evens.Add(nums[i]);
+                    }
+                    else
+                    {
+                        odds.Add(nums[i]);
+                    }
+                }
+                // Append lists in the order of evens first and then odds
+                evens.AddRange(odds);
+                return  evens.ToArray();
             }
             catch (Exception)
             {
@@ -90,7 +131,19 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
+                var map = new Dictionary<int, int>();
+
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    int complement = target - nums[i];
+
+                    if (map.ContainsKey(complement))
+            {
+                return new int[] { map[complement], i };
+            }
+
+            map[nums[i]] = i;
+        }
                 return new int[0]; // Placeholder
             }
             catch (Exception)
@@ -104,8 +157,17 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return 0; // Placeholder
+                // Edge cases= input not sorted; negative numbers will be considered, as they could contribute to the highest possible product
+                Array.Sort(nums); // Sort ascending by default
+
+                int n = nums.Length;
+
+                // Option 1: product of 3 largest
+                int max1 = nums[n - 1] * nums[n - 2] * nums[n - 3];
+
+                // Option 2: product of 2 smallest and largest, considering possible negatives
+                int max2 = nums[0] * nums[1] * nums[n - 1];
+                return Math.Max(max1, max2);
             }
             catch (Exception)
             {
@@ -118,8 +180,23 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return "101010"; // Placeholder
+                // Edge case: negative number
+                if (decimalNumber < 0)
+                    throw new ArgumentException("Provide a positive number");
+                // Edge case: zero
+                if (decimalNumber == 0)
+                    return "0";
+                string binary = "";
+
+                while (decimalNumber > 0)
+                {
+                    int remainder = decimalNumber % 2;
+                    binary = remainder + binary;
+                    decimalNumber /= 2;
+                }
+
+                return binary;
+                
             }
             catch (Exception)
             {
@@ -132,8 +209,24 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return 0; // Placeholder
+                int left = 0;
+                int right = nums.Length - 1;
+
+                while (left < right)
+                {
+                    int mid = left + (right - left) / 2;
+
+                    if (nums[mid] > nums[right])
+                    {
+                        left = mid + 1;
+                    }
+                    else
+                    {
+                        right = mid;
+                    }
+                }
+
+                return nums[left];
             }
             catch (Exception)
             {
@@ -146,8 +239,14 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return false; // Placeholder
+                // Edge case: negative number
+                if (x < 0)
+                    return false;
+                string original = x.ToString();
+                char[] reversedArray = original.ToCharArray();
+                Array.Reverse(reversedArray);
+                string reversed = new string(reversedArray);
+                return original == reversed;
             }
             catch (Exception)
             {
@@ -160,8 +259,24 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return 0; // Placeholder
+                // Edge case: negative number
+                if (n < 0)
+                    throw new ArgumentException("n must be non-negative");
+
+                if (n == 0)
+                    return 0;
+                if (n == 1)
+                    return 1;
+                int prev1 = 0;
+                int prev2 = 1;
+                int current = 0;
+                for (int i = 2; i <= n; i++)
+                {
+                    current = prev1 + prev2;
+                    prev1 = prev2;
+                    prev2 = current;
+                }
+                return current;
             }
             catch (Exception)
             {
@@ -170,3 +285,5 @@ namespace Assignment_2
         }
     }
 }
+
+
